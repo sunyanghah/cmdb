@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uino.cmdb.dao.CiDataDao">
+
+    <select id="pageCiData" resultType="CiData">
+
+        select
+        *
+        from
+        ci_data
+        <where>
+        class_id = #{dto.classId}
+        <if test="dto.conditions != null and dto.conditions.size > 0">
+            <foreach collection="dto.conditions" item="condition" >
+                <if test="condition.condition == 'like'">
+                    and data -> '$."${condition.field}"' like concat('%',#{condition.value},'%')
+                </if>
+                <if test="condition.condition == 'eq'">
+                    and data -> '$."${condition.field}"' = #{condition.value}
+                </if>
+                <if test="condition.condition == 'ge'">
+                    and data -> '$."${condition.field}"' &gt; #{condition.value}
+                </if>
+                <if test="condition.condition == 'le'">
+                    and data -> '$."${condition.field}"' &lt; #{condition.value}
+                </if>
+            </foreach>
+        </if>
+        <if test="dto.searchStr != null and dto.searchStr != ''">
+            and json_search(data,'all', '%${dto.searchStr}%')
+        </if>
+        </where>
+
+    </select>
+
+    <select id="queryCiByClassAndField" resultType="CiData">
+        select
+        id as id,
+        class_id as classId,
+        data as data,
+        description as description,
+        create_by as createBy,
+        create_time as createTime,
+        update_by as updateBy,
+        update_time as updateTime
+        from
+        ci_data
+        where
+        class_id = #{classId}
+        and
+        data -> '$."${fieldName}"' = #{fieldValue}
+        limit 1
+    </select>
+
+    <update id="removeJsonField" >
+
+        update
+            ci_data
+        set
+            data = JSON_REMOVE(data, '$.${fieldName}')
+        where
+            class_id = #{classId}
+
+    </update>
+
+
+</mapper>

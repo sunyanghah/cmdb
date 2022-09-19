@@ -1,0 +1,44 @@
+### OS Files ###
+*.DS_Store
+*.sw?
+.#*
+*#
+*~
+*.sublime-*
+Thumbs.db
+Desktop.ini
+#### Logs ###
+log
+logs
+LOG_PATH_IS_UNDEFINED
+*.log
+### vcs files ###
+.git
+.svn
+### Build Target ###
+build
+target
+dist
+*.class
+### Eclipse Project Files ###
+.settings
+proguard
+.classpath
+.project
+.springBeans
+### STS ###
+.apt_generated
+.factorypath
+.sts4-cache
+### IntelliJ IDEA Files ###
+.idea
+*.iws
+*.iml
+*.ipr
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/nbdist/
+/.nb-gradle/
+### local configuration ###
+application-local.yml
